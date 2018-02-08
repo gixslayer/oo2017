@@ -10,14 +10,26 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        StudentGroup studentGroup = new StudentGroup();
         int studentNumber;
 
-        studentGroup.create();
-        studentGroup.display();
+        System.out.print("How big is the group? ");
+        int size = scanner.nextInt();
+        StudentGroup studentGroup = new StudentGroup(size);
+
+        for(int i = 0; i < size; ++i) {
+            System.out.print("Enter student data (firstName secondName number): ");
+            String firstName = scanner.next();
+            String secondName = scanner.next();
+            studentNumber = scanner.nextInt();
+
+            studentGroup.set(i, new Student(firstName, secondName, studentNumber));
+        }
+
+        System.out.println("\nThe group now contains:");
+        System.out.println(studentGroup);
 
         do {
-            System.out.print("\nStudent number and new first/second name? ");
+            System.out.print("Student number and new first/second name? ");
             studentNumber = scanner.nextInt();
 
             if(studentNumber >= 0) {
@@ -30,7 +42,8 @@ public class Main {
                     student.get().setFirstName(newFirstName);
                     student.get().setSecondName(newSecondName);
 
-                    studentGroup.display();
+                    System.out.println("\nThe group now contains:");
+                    System.out.println(studentGroup);
                 } else {
                     scanner.nextLine(); // Consume buffered name(s) to avoid parsing it as an integer.
                     System.err.println("No student found with that student number");
