@@ -17,6 +17,11 @@ public class StudentGroup {
         students[index] = student;
     }
 
+    /**
+     * Get the student with the specified student number, if one exists.
+     * @param studentNumber The student number to search for.
+     * @return The first student found, or nothing if one does not exist.
+     */
     public Optional<Student> getStudent(int studentNumber) {
         return Arrays.stream(students).filter(s -> s.getNumber() == studentNumber).findFirst();
     }
