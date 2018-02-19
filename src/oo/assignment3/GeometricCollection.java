@@ -2,6 +2,10 @@ package oo.assignment3;
 
 import java.util.Optional;
 
+/**
+ * @author Ciske Harsema - s1010048
+ * @author Michiel Verloop - s1009995
+ */
 public class GeometricCollection {
     public static final int MAX_ELEMENTS = 10;
 
@@ -29,31 +33,24 @@ public class GeometricCollection {
         return numElements;
     }
 
+    /**
+     * Get the element at the specified index, if one exists.
+     * @param index The index of the element
+     * @return The element, if it exists
+     */
     public Optional<Geometric> get(int index) {
-        Optional<Geometric> result = Optional.empty();
-
-        if(index >= 0 && index < numElements) {
-            result = Optional.of(elements[index]);
-        }
-
-        return result;
+        return index >= 0 && index < numElements ? Optional.of(elements[index]) : Optional.empty();
     }
 
+    /**
+     * Remove the element at the specified index, if one exists.
+     * @param index The index of the element
+     */
     public void remove(int index) {
         if(index >= 0 && index < numElements) {
+            // Shift all elements following the element at index one position to the left
             System.arraycopy(elements, index + 1, elements, index, numElements - index - 1);
             --numElements;
         }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        for(int i = 0; i < numElements; ++i) {
-            sb.append(elements[i]).append('\n');
-        }
-
-        return sb.toString();
     }
 }

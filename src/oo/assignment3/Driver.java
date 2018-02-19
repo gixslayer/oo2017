@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Scanner;
 
+/**
+ * @author Ciske Harsema - s1010048
+ * @author Michiel Verloop - s1009995
+ */
 public class Driver {
     private final Scanner scanner;
     private final GeometricCollection collection;
@@ -71,9 +75,11 @@ public class Driver {
         if(arg.isEmpty()) {
             Arrays.sort(collection.getElements(), 0, collection.getNumElements());
         } else if(arg.equalsIgnoreCase("x")) {
-            Arrays.sort(collection.getElements(), 0, collection.getNumElements(), new GeometricLeftComparator());
+            Arrays.sort(collection.getElements(), 0, collection.getNumElements(),
+                    new GeometricLeftComparator());
         } else if(arg.equalsIgnoreCase("y")) {
-            Arrays.sort(collection.getElements(), 0, collection.getNumElements(), new GeometricBottomComparator());
+            Arrays.sort(collection.getElements(), 0, collection.getNumElements(),
+                    new GeometricBottomComparator());
         } else {
             System.err.printf("Invalid sort argument: '%s'\n", arg);
         }
