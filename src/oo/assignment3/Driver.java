@@ -88,29 +88,28 @@ public class Driver {
         do {
             System.out.print("\n[cmd]>");
             String command = scanner.next();
+            boolean shouldList = true;
 
             if(command.equalsIgnoreCase("quit")) {
                 keepRunning = false;
-            } else if(command.equalsIgnoreCase("show")) {
-                listElements();
             } else if(command.equalsIgnoreCase("circle")) {
                 cmdCircle();
-                listElements();
             } else if(command.equalsIgnoreCase("rectangle")) {
                 cmdRectangle();
-                listElements();
             } else if(command.equalsIgnoreCase("move")) {
                 cmdMove();
-                listElements();
             } else if(command.equalsIgnoreCase("remove")) {
                 cmdRemove();
-                listElements();
             } else if(command.equalsIgnoreCase("sort")) {
                 cmdSort();
-                listElements();
-            } else {
+            } else if(!command.equalsIgnoreCase("show")) {
                 System.err.printf("Unknown command: '%s'\n", command);
                 scanner.nextLine(); // Consume buffered input
+                shouldList = false;
+            }
+
+            if(shouldList && keepRunning) {
+                listElements();
             }
         } while(keepRunning);
     }
