@@ -1,6 +1,5 @@
 package oo.assignment3;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -73,13 +72,11 @@ public class Driver {
         String arg = scanner.nextLine().trim();
 
         if(arg.isEmpty()) {
-            Arrays.sort(collection.getElements(), 0, collection.getNumElements());
+            collection.sort(SortOrder.Area);
         } else if(arg.equalsIgnoreCase("x")) {
-            Arrays.sort(collection.getElements(), 0, collection.getNumElements(),
-                    new GeometricLeftComparator());
+            collection.sort(SortOrder.Left);
         } else if(arg.equalsIgnoreCase("y")) {
-            Arrays.sort(collection.getElements(), 0, collection.getNumElements(),
-                    new GeometricBottomComparator());
+            collection.sort(SortOrder.Bottom);
         } else {
             System.err.printf("Invalid sort argument: '%s'\n", arg);
         }

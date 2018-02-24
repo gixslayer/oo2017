@@ -1,5 +1,6 @@
 package oo.assignment3;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -51,6 +52,20 @@ public class GeometricCollection {
             // Shift all elements following the element at index one position to the left
             System.arraycopy(elements, index + 1, elements, index, numElements - index - 1);
             --numElements;
+        }
+    }
+
+    /**
+     * Sort the collection based on the given order, in an ascending manner.
+     * @param order The order to sort in
+     */
+    public void sort(SortOrder order) {
+        if(order == SortOrder.Area) {
+            Arrays.sort(elements, 0, numElements);
+        } else if(order == SortOrder.Bottom) {
+            Arrays.sort(elements, 0, numElements, new GeometricBottomComparator());
+        } else if(order == SortOrder.Left) {
+            Arrays.sort(elements, 0, numElements, new GeometricLeftComparator());
         }
     }
 }
