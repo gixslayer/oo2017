@@ -15,7 +15,7 @@ public class TicTacToeTUI {
 
     public TicTacToeTUI() {
         scanner = new Scanner(System.in);
-        rowSeparator= String.join("", Collections.nCopies(Board.SIZE * 2 - 1, "-"));
+        rowSeparator = String.join("", Collections.nCopies(Board.SIZE * 2 - 1, "-"));
     }
 
     /**
@@ -66,7 +66,7 @@ public class TicTacToeTUI {
     }
 
     private Mark getPlayerMark() {
-        Optional<Mark> mark = Optional.empty();
+        Mark mark = null;
 
         do {
             System.out.print("Select your mark (x or o): ");
@@ -74,15 +74,15 @@ public class TicTacToeTUI {
             String input = scanner.next();
 
             if(input.equalsIgnoreCase("x")) {
-                mark = Optional.of(Mark.Cross);
+                mark = Mark.Cross;
             } else if(input.equalsIgnoreCase("o")) {
-                mark =Optional.of(Mark.Circle);
+                mark = Mark.Circle;
             } else {
                 System.out.println("That is not a valid mark");
             }
-        } while(!mark.isPresent());
+        } while(mark == null);
 
-        return mark.get();
+        return mark;
     }
 
     private PlayerStrategy getPlayerStrategy() {
