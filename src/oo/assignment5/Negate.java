@@ -14,7 +14,15 @@ public class Negate extends UnaryExpression {
 
     @Override
     public String toString() {
-        return String.format("- (%s)", getOperand());
+        Expression operand = getOperand();
+        String format = "-%s";
+
+        if(operand instanceof BinaryExpression && !(operand instanceof Add)) {
+            // Add will already add brackets, no need to duplicate them.
+            format = "-(%s)";
+        }
+
+        return String.format(format, operand);
     }
 
     @Override
@@ -28,6 +36,8 @@ public class Negate extends UnaryExpression {
 
         if(operand instanceof Constant) {
             return new Constant(-((Constant) operand).getValue()); // neg(n) -> -n
+        } else if(operand instanceof Negate) {
+            return ((Negate) operand).getOperand(); // neg(neg(x)) -> x
         }
 
         return new Negate(operand);

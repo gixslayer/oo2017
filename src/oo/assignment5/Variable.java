@@ -26,4 +26,13 @@ public class Variable extends Expression {
     public double eval(Map<String, Double> store) {
         return store.get(name);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Variable){
+            return name.equals(((Variable) o).getName());
+        }
+
+        return super.equals(o);
+    }
 }

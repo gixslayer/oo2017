@@ -1,5 +1,6 @@
 package oo.assignment5;
 
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -16,19 +17,17 @@ public class Parser {
     }
 
     private void cmdSet() {
-        String variable = scanner.next();
-        String number = scanner.next();
-
         try {
-            double value = Double.parseDouble(number);
+            String variable = scanner.next();
+            double value = scanner.nextDouble();
 
             store.put(variable, value);
 
             System.out.println("[variables]");
             store.forEach((k, v) -> System.out.printf("%s = %f\n", k, v));
-        } catch (NumberFormatException ex) {
+        } catch (InputMismatchException ex) {
             scanner.nextLine();
-            System.out.printf("Could not parse %s as a double\n", number);
+            System.out.println("Could not parse value as a double");
         }
     }
 
@@ -47,11 +46,12 @@ public class Parser {
     }
 
     private void cmdHelp() {
-        System.out.println("exit|quit     - exit application");
-        System.out.println("set VAR VALUE - set variable to value");
-        System.out.println("clear VAR     - remove variable from store");
-        System.out.println("expr EXPR     - evaluate expression");
-        System.out.println("list          - list variable store");
+        System.out.println("exit|quit        - exit application");
+        System.out.println("set VAR VALUE    - set variable to value");
+        System.out.println("clear VAR        - remove variable from store");
+        System.out.println("expr EXPR        - evaluate expression");
+        System.out.println("list             - list variable store");
+        System.out.println("rand DEPTH RANGE - gen depth bound random expression with range bounded constants");
     }
 
     private void cmdExpr() {
@@ -66,6 +66,26 @@ public class Parser {
             System.out.printf("Evaluation: %f (parsed) %f (optimized)\n", expressionValue, optimizedValue);
         } catch (InvalidExpressionException ex) {
             System.out.printf("Error parsing expression: %s\n", ex.getMessage());
+        }
+    }
+
+    private void cmdRand() {
+        try {
+            int maxDepth = scanner.nextInt();
+            int range = scanner.nextInt();
+
+            Expression expression = ExpressionGenerator.generate(maxDepth, range, store.keySet());
+            Expression optimized = expression.optimize();
+            double expressionValue = expression.eval(store);
+            double optimizedValue = optimized.eval(store);
+
+            System.out.printf("Generated expression: %s\n", expression);
+            System.out.printf("Optimized expression: %s\n", optimized);
+            System.out.printf("Evaluation: %f (generated) %f (optimized)\n",
+                    expressionValue, optimizedValue);
+        } catch (InputMismatchException ex) {
+            scanner.nextLine();
+            System.out.println("Could not value as an integer");
         }
     }
 
@@ -89,6 +109,8 @@ public class Parser {
                 cmdHelp();
             } else if(cmd.equalsIgnoreCase("expr")) {
                 cmdExpr();
+            } else if(cmd.equalsIgnoreCase("rand")) {
+                cmdRand();
             } else {
                 scanner.nextLine();
                 System.out.println("Unknown command (see help)");
