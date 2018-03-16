@@ -13,6 +13,19 @@ public class SlidingGame implements Configuration {
     public static final int SIZE = N * N;
     public static final int HOLE = SIZE;
 
+    private static final int[][] LOOKUP_TABLE;
+
+    static {
+        // Pre-computing this table seems to be a slight performance increase.
+        LOOKUP_TABLE = new int[N][N];
+
+        for(int y = 0; y < N; ++y) {
+            for(int x = 0; x < N; ++x) {
+                LOOKUP_TABLE[x][y] = (int)Math.pow(31, x + y * N);
+            }
+        }
+    }
+
     private final Configuration parent;
     private final int[][] board;
     private int holeX, holeY;
@@ -220,7 +233,8 @@ public class SlidingGame implements Configuration {
 
             for(int y = 0; y < N; ++y) {
                 for(int x = 0; x < N; ++x) {
-                    value += board[x][y] * (int)Math.pow(31, x + y * N);
+                    //value += board[x][y] * (int)Math.pow(31, x + y * N);
+                    value += board[x][y] * LOOKUP_TABLE[x][y];
                 }
             }
 
