@@ -139,11 +139,17 @@ public class SlidingGame implements Configuration {
         if(o instanceof SlidingGame) {
             SlidingGame other = (SlidingGame)o;
 
-            // Try fast path early out on inequality.
+            // This method is performance critical, so try fast path early out on inequality.
+            if(holeX != other.holeX || holeY != other.holeY) {
+                return false;
+            }
+
+            // Most of the time these hash codes are cached, thus making this a cheap comparison.
             if(hashCode() != other.hashCode()) {
                 return false;
             }
 
+            // Slow and expensive compare should only run if needed.
             for(int y = 0; y < N; ++y) {
                 for(int x = 0; x < N; ++x) {
                     if(board[x][y] != other.board[x][y]) {
