@@ -9,6 +9,7 @@ public class Main {
         // c0ffee does not solve (N=3).
         // c0ffee5 solves in 52 steps (N=3).
         // coffee solves in 276 steps (N=4).
+        // coffee solves in 1112 steps (N=5) (only with TreeSet and extra heap memory).
         GameSolver.trySolve(0xc0ffee5);
     }
 }

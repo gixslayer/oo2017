@@ -14,7 +14,16 @@ public class Solver {
         this.toExamine = new PriorityQueue<>();
         //this.toExamine = new LinkedList<>();
         this.toExamine.add(initialConfiguration);
-        this.recurrences = new HashSet<>();
+        //this.recurrences = new HashSet<>();
+        // While the HashSet works reasonably well for a small puzzle, it scales horribly, probably
+        // because of (hash) collisions. A tree structure with a special comparator scales much
+        // better.
+        this.recurrences = new TreeSet<>((configuration, t1) -> {
+            SlidingGame a = (SlidingGame)configuration;
+            SlidingGame b = (SlidingGame)t1;
+
+            return SlidingGame.compareTree(a, b);
+        });
         this.recurrences.add(initialConfiguration);
     }
 

@@ -79,6 +79,27 @@ public class SlidingGame implements Configuration {
     }
 
     /**
+     * Used to compare elements in a TreeSet context.
+     * @param a The first element.
+     * @param b The second element.
+     * @return 0 if and only if a equals b, otherwise the sign of the return value determines
+     * the relative order.
+     */
+    public static int compareTree(SlidingGame a, SlidingGame b) {
+        for(int y = 0; y < N; ++y) {
+            for(int x = 0; x < N; ++x) {
+                int dif = a.board[x][y] - b.board[x][y];
+
+                if(dif != 0) {
+                    return dif;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    /**
      * Creates a copy of the game where the specified element is moved into the empty position.
      * @param x The x coordinate of the element.
      * @param y The y coordinate of the element.
