@@ -2,6 +2,7 @@ package oo.assignment7;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
 
 /**
  * @author Ciske Harsema - s1010048
@@ -53,18 +54,9 @@ public class GrayNode implements QTNode {
             nodes[i] = nodes[i].consolidate();
         }
 
-        // Check if all child nodes are leaf nodes of the same type.
-        for (int i = 1; i < nodes.length; ++i) {
-            QTNode prev = nodes[i - 1];
-            QTNode cur = nodes[i];
-
-            if (prev instanceof GrayNode || cur.getClass() != prev.getClass()) {
-                return this;
-            }
-        }
-
-        // If so, return a new leaf node of that type.
-        return QTNodeFactory.fromValue(((LeafNode) nodes[0]).getValue());
+        // If all nodes are of the same type and a leaf type, then consolidate.
+        return Arrays.stream(nodes).map(QTNode::getClass).distinct().count() == 1
+                && nodes[0] instanceof LeafNode ? nodes[0] : this;
     }
 
     public static GrayNode readNode(CharReader reader) throws IOException {
