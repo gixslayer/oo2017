@@ -12,6 +12,22 @@ import static org.junit.Assert.*;
 public class IceTest {
 
     @Test
+    public void testVanilla() {
+        Ice ice = Flavor.Vanilla;
+
+        assertEquals(150, ice.price());
+        assertEquals("Vanilla ice cream", ice.giveDescription());
+    }
+
+    @Test
+    public void testYoghurt() {
+        Ice ice = Flavor.Yoghurt;
+
+        assertEquals(200, ice.price());
+        assertEquals("Yoghurt ice cream", ice.giveDescription());
+    }
+
+    @Test
     public void testVanillaComposition() {
         Ice ice = new Sprinkles(new Sprinkles(new WhippedCream(new ChocolateDip(Flavor.Yoghurt))));
 
