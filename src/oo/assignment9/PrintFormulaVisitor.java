@@ -5,20 +5,11 @@ package oo.assignment9;
  * @author Michiel Verloop - s1009995
  */
 public class PrintFormulaVisitor implements FormulaVisitor<Void> {
-    private static boolean shouldParenthesize(Formula formula, Formula operand) {
-        if(formula instanceof UnaryOperator)  {
-            return operand instanceof BinaryOperator;
-        }  else if(formula instanceof BinaryOperator && operand instanceof BinaryOperator) {
-            return ((BinaryOperator) operand).getStrategy().getBindingStrength() <
-                    ((BinaryOperator) formula).getStrategy().getBindingStrength();
-        }
-
-        return false;
-    }
+    private static final BindingStrengthFormulaVisitor STRENGTH_VISITOR = new BindingStrengthFormulaVisitor();
 
     @Override
     public Void visit(UnaryOperator formula) {
-        boolean parenthesizeOperand = shouldParenthesize(formula, formula.getOperand());
+        boolean parenthesizeOperand = formula.getOperand().accept(STRENGTH_VISITOR) < formula.accept(STRENGTH_VISITOR);
 
         System.out.print(formula.getStrategy());
         if(parenthesizeOperand) System.out.print("(");
@@ -30,8 +21,8 @@ public class PrintFormulaVisitor implements FormulaVisitor<Void> {
 
     @Override
     public Void visit(BinaryOperator formula) {
-        boolean parenthesizeLeftOperand = shouldParenthesize(formula, formula.getLeftOperand());
-        boolean parenthesizeRightOperand = shouldParenthesize(formula, formula.getRightOperand());
+        boolean parenthesizeLeftOperand = formula.getLeftOperand().accept(STRENGTH_VISITOR) < formula.accept(STRENGTH_VISITOR);
+        boolean parenthesizeRightOperand = formula.getRightOperand().accept(STRENGTH_VISITOR) < formula.accept(STRENGTH_VISITOR);
 
         if(parenthesizeLeftOperand) System.out.print("(");
         formula.getLeftOperand().accept(this);
