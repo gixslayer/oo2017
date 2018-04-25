@@ -5,59 +5,46 @@ package oo.assignment9;
  * @author Michiel Verloop - s1009995
  */
 public enum BinaryOperators implements BinaryOperatorStrategy<Boolean> {
-    And(3) {
+    And(3, "/\\") {
         @Override
         public Boolean apply(Boolean leftOperand, Boolean rightOperand) {
             return leftOperand && rightOperand;
         }
-
-        @Override
-        public String toString() {
-            return "/\\";
-        }
     },
-    Or(2) {
+    Or(2, "\\/") {
         @Override
         public Boolean apply(Boolean leftOperand, Boolean rightOperand) {
             return  leftOperand || rightOperand;
         }
-
-        @Override
-        public String toString() {
-            return "\\/";
-        }
     },
-    Implication(1) {
+    Implication(1, "->") {
         @Override
         public Boolean apply(Boolean leftOperand, Boolean rightOperand) {
             return !leftOperand || rightOperand;
         }
-
-        @Override
-        public String toString() {
-            return "->";
-        }
     },
-    Equivalence(0) {
+    Equivalence(0, "<->") {
         @Override
         public Boolean apply(Boolean leftOperand, Boolean rightOperand) {
             return leftOperand == rightOperand;
         }
-
-        @Override
-        public String toString() {
-            return "<->";
-        }
     };
 
     private final int bindingStrength;
+    private final String symbol;
 
-    BinaryOperators(int bindingStrength) {
+    BinaryOperators(int bindingStrength, String symbol) {
         this.bindingStrength = bindingStrength;
+        this.symbol = symbol;
     }
 
     @Override
     public int getBindingStrength() {
         return bindingStrength;
+    }
+
+    @Override
+    public String getSymbol() {
+        return symbol;
     }
 }

@@ -5,15 +5,21 @@ package oo.assignment9;
  * @author Michiel Verloop - s1009995
  */
 public enum UnaryOperators implements UnaryOperatorStrategy<Boolean> {
-    Not {
+    Not("~") {
         @Override
         public Boolean apply(Boolean operand) {
             return !operand;
         }
+    };
 
-        @Override
-        public String toString() {
-            return "~";
-        }
+    private final String symbol;
+
+    UnaryOperators(String symbol) {
+        this.symbol = symbol;
+    }
+
+    @Override
+    public String getSymbol() {
+        return symbol;
     }
 }

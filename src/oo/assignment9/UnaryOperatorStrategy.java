@@ -6,4 +6,6 @@ package oo.assignment9;
  */
 public interface UnaryOperatorStrategy<T> {
     T apply(T operand);
+
+    String getSymbol();
 }

@@ -8,4 +8,5 @@ public interface BinaryOperatorStrategy<T> {
     T apply(T leftOperand, T rightOperand);
 
     int getBindingStrength();
+    String getSymbol();
 }

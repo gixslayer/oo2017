@@ -9,11 +9,12 @@ public class PrintFormulaVisitor implements FormulaVisitor<Void> {
 
     @Override
     public Void visit(UnaryOperator formula) {
-        boolean parenthesizeOperand = formula.getOperand().accept(STRENGTH_VISITOR) < formula.accept(STRENGTH_VISITOR);
+        Formula operand = formula.getOperand();
+        boolean parenthesizeOperand = operand.accept(STRENGTH_VISITOR) < formula.accept(STRENGTH_VISITOR);
 
-        System.out.print(formula.getStrategy());
+        System.out.print(formula.getStrategy().getSymbol());
         if(parenthesizeOperand) System.out.print("(");
-        formula.getOperand().accept(this);
+        operand.accept(this);
         if(parenthesizeOperand) System.out.print(")");
 
         return null;
@@ -21,15 +22,17 @@ public class PrintFormulaVisitor implements FormulaVisitor<Void> {
 
     @Override
     public Void visit(BinaryOperator formula) {
-        boolean parenthesizeLeftOperand = formula.getLeftOperand().accept(STRENGTH_VISITOR) < formula.accept(STRENGTH_VISITOR);
-        boolean parenthesizeRightOperand = formula.getRightOperand().accept(STRENGTH_VISITOR) < formula.accept(STRENGTH_VISITOR);
+        Formula leftOperand = formula.getLeftOperand();
+        Formula rightOperand = formula.getRightOperand();
+        boolean parenthesizeLeftOperand = leftOperand.accept(STRENGTH_VISITOR) < formula.accept(STRENGTH_VISITOR);
+        boolean parenthesizeRightOperand = rightOperand.accept(STRENGTH_VISITOR) < formula.accept(STRENGTH_VISITOR);
 
         if(parenthesizeLeftOperand) System.out.print("(");
-        formula.getLeftOperand().accept(this);
+        leftOperand.accept(this);
         if(parenthesizeLeftOperand) System.out.print(")");
-        System.out.printf(" %s ", formula.getStrategy());
+        System.out.printf(" %s ", formula.getStrategy().getSymbol());
         if(parenthesizeRightOperand) System.out.print("(");
-        formula.getRightOperand().accept(this);
+        rightOperand.accept(this);
         if(parenthesizeRightOperand) System.out.print(")");
 
         return null;
