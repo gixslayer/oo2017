@@ -11,9 +11,9 @@ public class ShoppingCart {
     private final List<Item> items;
     private PaymentMethod paymentMethod;
 
-    public ShoppingCart() {
+    public ShoppingCart(PaymentMethod paymentMethod) {
         this.items = new ArrayList<>();
-        this.paymentMethod = PaymentMethods.IDeal;
+        this.paymentMethod = paymentMethod;
     }
 
     public double totalCost() {
@@ -40,6 +40,10 @@ public class ShoppingCart {
 
     public void removeItem(Item item) {
         items.remove(item);
+    }
+
+    public void clear() {
+        items.clear();
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {

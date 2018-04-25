@@ -1,6 +1,8 @@
 package oo.tests.assignment10.store;
 
 import oo.assignment10.store.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -11,17 +13,31 @@ import static org.junit.Assert.*;
  */
 public class ShoppingCardTest {
     private static final double DELTA = 0.00001;
+    private static final PaymentMethod IDEAL = new IDealPayment("ING", 12345678, 1234);
+    private static final PaymentMethod PAYPAL = new PayPalPayment("john@doe.com", "hunter2", 9999);
+    private static final PaymentMethod CREDITCARD = new CreditCardPayment("jane doe", "01-01-2024", 987654321, 456);
+    private static final PaymentMethod DEFAULT_PAYMENT_METHOD = IDEAL;
+
+    private static ShoppingCart cart;
+
+    @BeforeClass
+    public static void createCart() {
+        cart = new ShoppingCart(DEFAULT_PAYMENT_METHOD);
+    }
+
+    @Before
+    public void resetCart() {
+        cart.clear();
+        cart.setPaymentMethod(DEFAULT_PAYMENT_METHOD);
+    }
 
     @Test
     public void priceOfEmpty() {
-        ShoppingCart cart = new ShoppingCart();
-
         assertEquals(0.0, cart.totalCost(), DELTA);
     }
 
     @Test
     public void priceOfEmptyByRemoval() {
-        ShoppingCart cart = new ShoppingCart();
         Item item = new WashingMachine();
         cart.addItem(item);
         cart.removeItem(item);
@@ -31,7 +47,6 @@ public class ShoppingCardTest {
 
     @Test
     public void priceOfWashingMachineSingle() {
-        ShoppingCart cart = new ShoppingCart();
         cart.addItem(new WashingMachine());
 
         assertEquals(529, cart.totalCost(), DELTA);
@@ -39,7 +54,6 @@ public class ShoppingCardTest {
 
     @Test
     public void priceOfWashingMachineMultiple() {
-        ShoppingCart cart = new ShoppingCart();
         cart.addItem(new WashingMachine());
         cart.addItem(new WashingMachine());
 
@@ -48,7 +62,6 @@ public class ShoppingCardTest {
 
     @Test
     public void priceOfWaterMelonSingle() {
-        ShoppingCart cart = new ShoppingCart();
         cart.addItem(new WaterMelon());
 
         assertEquals(11.25, cart.totalCost(), DELTA);
@@ -56,7 +69,6 @@ public class ShoppingCardTest {
 
     @Test
     public void priceOfWaterMelonMultiple() {
-        ShoppingCart cart = new ShoppingCart();
         cart.addItem(new WaterMelon());
         cart.addItem(new WaterMelon());
 
@@ -65,7 +77,6 @@ public class ShoppingCardTest {
 
     @Test
     public void priceOfWineGlassesSingle() {
-        ShoppingCart cart = new ShoppingCart();
         cart.addItem(new WineGlasses());
 
         assertEquals(15.25, cart.totalCost(), DELTA);
@@ -73,7 +84,6 @@ public class ShoppingCardTest {
 
     @Test
     public void priceOfWineGlassesMultiple() {
-        ShoppingCart cart = new ShoppingCart();
         cart.addItem(new WineGlasses());
         cart.addItem(new WineGlasses());
 
@@ -82,7 +92,6 @@ public class ShoppingCardTest {
 
     @Test
     public void equalShippingCostIncurredOnce() {
-        ShoppingCart cart = new ShoppingCart();
         cart.addItem(new WaterMelon());
         cart.addItem(new WineGlasses());
 
@@ -91,7 +100,6 @@ public class ShoppingCardTest {
 
     @Test
     public void largeCart() {
-        ShoppingCart cart = new ShoppingCart();
         cart.addItem(new WashingMachine());
         cart.addItem(new WaterMelon());
         cart.addItem(new WineGlasses());
@@ -107,44 +115,39 @@ public class ShoppingCardTest {
 
     @Test
     public void paymentDefault() {
-        ShoppingCart cart = new ShoppingCart();
-
-        assertEquals(PaymentMethods.IDeal, cart.getPaymentMethod());
+        assertEquals(IDEAL, cart.getPaymentMethod());
     }
 
     @Test
     public void paymentIDeal() {
-        ShoppingCart cart = new ShoppingCart();
-        cart.setPaymentMethod(PaymentMethods.IDeal);
+        cart.setPaymentMethod(IDEAL);
         cart.addItem(new WashingMachine());
         cart.addItem(new WaterMelon());
         cart.addItem(new WineGlasses());
 
-        assertEquals(PaymentMethods.IDeal, cart.getPaymentMethod());
+        assertEquals(IDEAL, cart.getPaymentMethod());
         assertTrue(cart.checkout());
     }
 
     @Test
     public void paymentCreditCard() {
-        ShoppingCart cart = new ShoppingCart();
-        cart.setPaymentMethod(PaymentMethods.CreditCard);
+        cart.setPaymentMethod(CREDITCARD);
         cart.addItem(new WashingMachine());
         cart.addItem(new WaterMelon());
         cart.addItem(new WineGlasses());
 
-        assertEquals(PaymentMethods.CreditCard, cart.getPaymentMethod());
+        assertEquals(CREDITCARD, cart.getPaymentMethod());
         assertTrue(cart.checkout());
     }
 
     @Test
     public void paymentPayPal() {
-        ShoppingCart cart = new ShoppingCart();
-        cart.setPaymentMethod(PaymentMethods.PayPal);
+        cart.setPaymentMethod(PAYPAL);
         cart.addItem(new WashingMachine());
         cart.addItem(new WaterMelon());
         cart.addItem(new WineGlasses());
 
-        assertEquals(PaymentMethods.PayPal, cart.getPaymentMethod());
+        assertEquals(PAYPAL, cart.getPaymentMethod());
         assertFalse(cart.checkout());
     }
 }
