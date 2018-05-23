@@ -12,7 +12,7 @@ public class Main {
     private static final Object syncRoot = new Object();
 
     public static void main(String[] args) {
-        //findFile("/home/s1010048/", "Main.java");
+        //findFile("/home/", "Main.java");
         sort(100_000, 1);
     }
 
@@ -38,21 +38,20 @@ public class Main {
         /*
         Example output:
 
-            [Parallel merge sort]
-            Num elements: 100000
-            Sorted: true
-            Time taken: 27108 ms
-
             [Sequential merge sort]
             Num elements: 100000
             Sorted: true
-            Time taken: 27697 ms
+            Time taken: 14162 ms
 
-            Speedup of parallel sort: 1.02
-            Available processors: 2
+            [Parallel merge sort]
+            Num elements: 100000
+            Sorted: true
+            Time taken: 5361 ms
 
-        No real speedup as this is being run in a VM with only 2 processors and little memory. Since
-        there is a substantial amount of overhead involved, this makes sense.
+            Speedup of parallel sort: 2.64
+            Available processors: 8
+
+        Ran on a laptop with an old i7, so 4 physical cores (8 logical due to hyper threading).
         */
     }
 
@@ -88,6 +87,7 @@ public class Main {
     }
 
     private static void print(File file) {
+        // Syncing as this method is invoked from multiple threads.
         synchronized (syncRoot) {
             System.out.printf("Found at %s\n", file.getAbsoluteFile());
         }

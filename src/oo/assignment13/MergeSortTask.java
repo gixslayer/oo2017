@@ -9,7 +9,7 @@ import java.util.concurrent.RecursiveTask;
  * @author Michiel Verloop - s1009995
  */
 public class MergeSortTask extends RecursiveTask<int[]> {
-    private static final int PARALLEL_THRESHOLD = 1000;
+    private static final int PARALLEL_THRESHOLD = 5000;
 
     private final int[] array;
 
