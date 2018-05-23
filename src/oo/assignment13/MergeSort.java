@@ -18,15 +18,23 @@ public class MergeSort {
         return task.join();
     }
 
+    public static int[] sortAlt(int[] array) {
+        MergeSortAltTask task = new MergeSortAltTask(array, 0, array.length);
+
+        POOL.execute(task);
+
+        return task.join();
+    }
+
     public static int[] sortSequential(int[] array) {
         if(array.length < 2) {
             return array;
+        } else {
+            int[] firstHalf = sortSequential(Arrays.copyOf(array, array.length / 2));
+            int[] secondHalf = sortSequential(Arrays.copyOfRange(array, array.length / 2, array.length));
+
+            return merge(firstHalf, secondHalf, array);
         }
-
-        int[] firstHalf = sort(Arrays.copyOf(array, array.length / 2));
-        int[] secondHalf = sort(Arrays.copyOfRange(array, array.length / 2, array.length));
-
-        return merge(firstHalf, secondHalf, array);
     }
 
     /**
@@ -50,5 +58,11 @@ public class MergeSort {
             dest[destIndex ++] = part2[part2Index ++];
 
         return dest;
+    }
+
+    public static int[] merge(int[] part1, int[] part2) {
+        int[] dest = new int[part1.length + part2.length];
+
+        return merge(part1, part2, dest);
     }
 }

@@ -3,6 +3,7 @@ package oo.assignment13;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * @author Ciske Harsema - s1010048
@@ -13,7 +14,7 @@ public class Main {
 
     public static void main(String[] args) {
         //findFile("/home/", "Main.java");
-        sort(100_000, 1);
+        sort(10_000_000, 1);
     }
 
     private static void findFile(String path, String fileName) {
@@ -27,32 +28,48 @@ public class Main {
     private static void sort(int numElements, long seed) {
         int[] sequentialArray = createRandomArray(numElements, seed);
         int[] parallelArray = createRandomArray(numElements, seed);
+        int[] parallelAltArray = createRandomArray(numElements, seed);
 
-        long sequentialTime = timeExecution(() -> MergeSort.sortSequential(sequentialArray));
-        long parallelTime = timeExecution(() -> MergeSort.sort(parallelArray));
+        long sequentialTime = timeSort(MergeSort::sortSequential, sequentialArray, "Sequential sort");
+        long parallelTime = timeSort(MergeSort::sort, parallelArray, "Parallel sort");
+        long parallelAltTime = timeSort(MergeSort::sortAlt, parallelAltArray, "Parallel alternative sort");
 
-        displaySortResult(sequentialArray, sequentialTime, "Sequential merge sort");
-        displaySortResult(parallelArray, parallelTime, "Parallel merge sort");
-        displaySpeedup(parallelTime, sequentialTime);
+        displaySpeedup(sequentialTime, parallelTime, parallelAltTime);
 
         /*
         Example output:
 
-            [Sequential merge sort]
-            Num elements: 100000
+            [Sequential sort]
+            Num elements: 5000000
             Sorted: true
-            Time taken: 14162 ms
+            Time taken: 1018 ms
 
-            [Parallel merge sort]
-            Num elements: 100000
+            [Parallel sort]
+            Num elements: 5000000
             Sorted: true
-            Time taken: 5361 ms
+            Time taken: 292 ms
 
-            Speedup of parallel sort: 2.64
+            [Parallel alternative sort]
+            Num elements: 5000000
+            Sorted: true
+            Time taken: 227 ms
+
+            Speedup of parallel sort: 3.49
+            Speedup of parallel alternative sort: 4.48
             Available processors: 8
 
         Ran on a laptop with an old i7, so 4 physical cores (8 logical due to hyper threading).
         */
+    }
+
+    private static long timeSort(Function<int[], int[]> sortFunc, int[] array, String header) {
+        long start = System.currentTimeMillis();
+        int[] sorted = sortFunc.apply(array);
+        long time = System.currentTimeMillis() - start;
+
+        displaySortResult(sorted, time, header);
+
+        return time;
     }
 
     private static void displaySortResult(int[] array, long time, String header) {
@@ -62,17 +79,10 @@ public class Main {
         System.out.printf("Time taken: %d ms\n\n", time);
     }
 
-    private static void displaySpeedup(long parallelTime, long sequentialTime) {
+    private static void displaySpeedup(long sequentialTime, long parallelTime, long parallelAltTime) {
         System.out.printf("Speedup of parallel sort: %.2f\n", (double)sequentialTime / parallelTime);
+        System.out.printf("Speedup of parallel alternative sort: %.2f\n", (double)sequentialTime / parallelAltTime);
         System.out.printf("Available processors: %d\n", Runtime.getRuntime().availableProcessors());
-    }
-
-    private static long timeExecution(Runnable action) {
-        long start = System.currentTimeMillis();
-
-        action.run();
-
-        return System.currentTimeMillis() - start;
     }
 
     private static int[] createRandomArray(int numElements, long seed) {
