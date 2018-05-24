@@ -49,7 +49,7 @@ public class MergeSortNonPooled implements Runnable {
             if(threadCount.getAndIncrement() < THREAD_LIMIT) {
                 leftTask.inThread = true;
                 thread = new Thread(leftTask);
-                thread.run();
+                thread.start();
             } else {
                 threadCount.decrementAndGet();
                 leftTask.run();

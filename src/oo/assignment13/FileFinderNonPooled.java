@@ -49,7 +49,7 @@ public class FileFinderNonPooled implements Runnable {
                     // Only fork if the current search is using less threads than allowed.
                     if(threadCount.getAndIncrement() < THREAD_LIMIT) {
                         task.inThread = true;
-                        new Thread(task).run();
+                        new Thread(task).start();
                     } else {
                         threadCount.decrementAndGet();
                         task.run();

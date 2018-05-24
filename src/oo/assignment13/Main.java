@@ -45,20 +45,26 @@ public class Main {
             [Sequential sort]
             Num elements: 5000000
             Sorted: true
-            Time taken: 1018 ms
+            Time taken: 1008 ms
 
             [Parallel sort]
             Num elements: 5000000
             Sorted: true
-            Time taken: 292 ms
+            Time taken: 335 ms
 
             [Parallel alternative sort]
             Num elements: 5000000
             Sorted: true
-            Time taken: 227 ms
+            Time taken: 238 ms
 
-            Speedup of parallel sort: 3.49
-            Speedup of parallel alternative sort: 4.48
+            [Parallel non pooled]
+            Num elements: 5000000
+            Sorted: true
+            Time taken: 217 ms
+
+            Speedup of parallel sort: 3.01
+            Speedup of parallel alternative sort: 4.24
+            Speedup of parallel non pooled sort: 4.65
             Available processors: 8
 
         Ran on a laptop with an old i7, so 4 physical cores (8 logical due to hyper threading).
