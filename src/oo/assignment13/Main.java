@@ -19,6 +19,7 @@ public class Main {
 
     private static void findFile(String path, String fileName) {
         try {
+            //FileFinder.findNonPooled(path, fileName, Main::print);
             FileFinder.find(path, fileName, Main::print);
         } catch (FileNotFoundException e) {
             System.out.printf("Could not find directory '%s'\n", path);
@@ -29,12 +30,14 @@ public class Main {
         int[] sequentialArray = createRandomArray(numElements, seed);
         int[] parallelArray = createRandomArray(numElements, seed);
         int[] parallelAltArray = createRandomArray(numElements, seed);
+        int[] nonPooledArray = createRandomArray(numElements, seed);
 
         long sequentialTime = timeSort(MergeSort::sortSequential, sequentialArray, "Sequential sort");
         long parallelTime = timeSort(MergeSort::sort, parallelArray, "Parallel sort");
         long parallelAltTime = timeSort(MergeSort::sortAlt, parallelAltArray, "Parallel alternative sort");
+        long nonPooledTime = timeSort(MergeSort::sortNonPooled, nonPooledArray, "Parallel non pooled");
 
-        displaySpeedup(sequentialTime, parallelTime, parallelAltTime);
+        displaySpeedup(sequentialTime, parallelTime, parallelAltTime, nonPooledTime);
 
         /*
         Example output:
@@ -79,9 +82,10 @@ public class Main {
         System.out.printf("Time taken: %d ms\n\n", time);
     }
 
-    private static void displaySpeedup(long sequentialTime, long parallelTime, long parallelAltTime) {
+    private static void displaySpeedup(long sequentialTime, long parallelTime, long parallelAltTime, long nonPooledTime) {
         System.out.printf("Speedup of parallel sort: %.2f\n", (double)sequentialTime / parallelTime);
         System.out.printf("Speedup of parallel alternative sort: %.2f\n", (double)sequentialTime / parallelAltTime);
+        System.out.printf("Speedup of parallel non pooled sort: %.2f\n", (double)sequentialTime / nonPooledTime);
         System.out.printf("Available processors: %d\n", Runtime.getRuntime().availableProcessors());
     }
 

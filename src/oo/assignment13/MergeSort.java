@@ -2,6 +2,7 @@ package oo.assignment13;
 
 import java.util.Arrays;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Ciske Harsema - s1010048
@@ -35,6 +36,15 @@ public class MergeSort {
 
             return merge(firstHalf, secondHalf, array);
         }
+    }
+
+    public static int[] sortNonPooled(int[] array) {
+        AtomicInteger threadCount = new AtomicInteger();
+        MergeSortNonPooled task = new MergeSortNonPooled(array, 0, array.length, threadCount);
+
+        task.run();
+
+        return task.getResult();
     }
 
     /**

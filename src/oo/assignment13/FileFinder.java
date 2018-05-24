@@ -3,6 +3,7 @@ package oo.assignment13;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -28,5 +29,22 @@ public class FileFinder {
         POOL.execute(task);
 
         task.join();
+    }
+
+    public static void findNonPooled(String path, String fileName, Consumer<File> onFound) throws FileNotFoundException {
+        File directory = new File(path);
+
+        if(!directory.exists() || !directory.isDirectory()) {
+            throw new FileNotFoundException("directory does not exist, or is not a directory");
+        }
+
+        findNonPooled(directory, fileName, onFound);
+    }
+
+    public static void findNonPooled(File directory, String fileName, Consumer<File> onFound) {
+        AtomicInteger threadCount = new AtomicInteger();
+        FileFinderNonPooled fileFinder = new FileFinderNonPooled(directory, fileName, onFound, threadCount);
+
+        fileFinder.run();
     }
 }
