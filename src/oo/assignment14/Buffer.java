@@ -18,6 +18,7 @@ public class Buffer<T> {
     private int count;
 
     public Buffer(int size) {
+        // This cast works due to type erasure, which will erase T to Object.
         //noinspection unchecked
         this.buffer = (T[])new Object[size];
         this.lock = new ReentrantLock();
@@ -32,14 +33,17 @@ public class Buffer<T> {
         lock.lock();
 
         try {
+            // Block this thread while the buffer is full.
             while (count == buffer.length) {
                 bufferFull.await();
             }
 
+            // Store the element, wrapping around the write index if needed.
             buffer[writeIndex] = element;
             writeIndex = (writeIndex + 1) % buffer.length;
             ++count;
 
+            // Notify thread blocked on bufferEmpty.await(), since a new element is available.
             bufferEmpty.signal();
         } finally {
             lock.unlock();
@@ -50,14 +54,17 @@ public class Buffer<T> {
         lock.lock();
 
         try {
+            // Block this thread while the buffer is empty.
             while (count == 0) {
                 bufferEmpty.await();
             }
 
+            // Retrieve the element, wrapping around the read index if needed.
             T element = buffer[readIndex];
             readIndex = (readIndex + 1) % buffer.length;
             --count;
 
+            // Notify thread blocked on bufferFull.await(), since space for a new element is available.
             bufferFull.signal();
 
             return element;

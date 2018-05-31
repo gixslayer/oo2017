@@ -4,7 +4,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.IntConsumer;
 
 public class Sieve implements Runnable {
-    public static final int BUFFER_SIZE = 256;
+    // A higher buffer size will improve efficiency for large prime generation count, but also increases memory footprint.
+    public static final int BUFFER_SIZE = 4;
 
     private final int mod;
     private final Buffer<Integer> input;
